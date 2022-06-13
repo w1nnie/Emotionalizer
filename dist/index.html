@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+<!-- オーバーレイ / Overlay -->
+<div id="overlay">
+    <p><span class="far">&#xf254;</span>now loading...</p>
+  </div>
+  
+  <!-- ヘッダ / Header -->
+  <div id="header">
+    <!-- 再生コントロール / Playback control -->
+    <div id="control" class="far">
+      <a href="#" id="play" class="disabled">&#xf144;</a>
+      <a href="#" id="stop" class="disabled">&#xf28d;</a>
+    </div>
+    <!-- アーティストと楽曲の情報 / Artist and song info -->
+    <div id="meta">
+      <div id="artist">artist: <span>-</span></div>
+      <div id="song">song: <span>-</span></div>
+    </div>
+  </div>
+  
+  <!-- 音源 / Audio souce -->
+  <div id="media"></div>
+  
+  <!-- 歌詞 / Lyrics text -->
+  <div id="lyrics">
+    <!-- 文字 / Text -->
+    <div id="text"></div>
+    <!-- ビートバー / Beat bar -->
+    <div id="bar"></div>
+  </div>
+  
+  <!-- シークバー -->
+  <div id="seekbar">
+    <div></div>
+  </div>
+  <div id="va">
+    <div id="varadius"></div>
+    <div id="vatheta"></div>
+  </div>
+</body>
+<script src="index.js"></script>
+</html>

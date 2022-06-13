@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "textalive-app-api": "^0.3.2",
+    "webpack-dev-server": "^4.9.2"
+  },
+  "name": "magicalmirai2022",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
