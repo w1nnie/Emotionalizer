@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-    mode:'production',
+    mode:'development',
     entry: {
         index: './src/index.js',
     },
@@ -9,13 +9,22 @@ module.exports = {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
     },
+    cache: true,
     devServer: {
         static: {
-            directory: './',
+            directory: path.join(__dirname, "dist"),
         },
         port: 8080,
         open: true,
-        watchFiles: ['src/**/*', 'dist/**/*', 'assets/**/*'],
+        watchFiles: ['src/**/*', 'dist/**/*'],
         compress: true,
+    },
+    module: {
+        rules: [
+            {
+                test: /\.txt/,
+                type: 'asset/source',
+            }
+        ]
     }
 };

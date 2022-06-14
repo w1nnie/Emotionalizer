@@ -1,3 +1,5 @@
+import lyrics from './loading_memories_lyrics.txt';
+
 export default function loadSong(app, player){
     console.log("onAppReady");
     if (app.managed) {
@@ -9,7 +11,7 @@ export default function loadSong(app, player){
     // Loading Memories / せきこみごはん feat. 初音ミク
     player.createFromSongUrl("https://piapro.jp/t/RoPB/20220122172830");
 
-    convertCSVtoArray();
+    return lyrics;
 
 
     // 青に溶けた風船 / シアン・キノ feat. 初音ミク
@@ -28,13 +30,3 @@ export default function loadSong(app, player){
     // player.createFromSongUrl("https://piapro.jp/t/GqT2/20220129182012");
     }
 }
-
-function convertCSVtoArray(){
-    let request = new XMLHttpRequest();
-    let filename = "../assets/loading_memories_lyrics.csv";
-    request.open("GET", filename, true);
-    request.send(null);
-    request.onload = () => {
-        console.log(request.responseText);
-    }
-  }

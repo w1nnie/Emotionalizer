@@ -25,12 +25,15 @@ const textContainer = document.querySelector("#text");
 const seekbar = document.querySelector("#seekbar");
 const paintedSeekbar = seekbar.querySelector("div");
 let b, c;
+let lyrics = "";
+let lyricsAlley = [];
+let count = 0;
 
 player.addListener({
   /* APIの準備ができたら呼ばれる */
   onAppReady(app) {
-    loadSong(app, player);
-    console.log("lpooooo");
+    lyrics = loadSong(app, player);
+    lyricsAlley = lyrics.split(',')
   },
 
   /* 楽曲が変わったら呼ばれる */
@@ -106,7 +109,8 @@ player.addListener({
       // 新しい文字が発声されようとしている
       if (c !== current) {
         newChar(current, player, textContainer);
-        // newVowel();
+        console.log(lyricsAlley[count]);
+        count = count + 1;
         c = current;
       }
       current = current.next;
