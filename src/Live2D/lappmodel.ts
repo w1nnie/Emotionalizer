@@ -238,7 +238,7 @@ export class LAppModel extends CubismUserModel {
 
       const breathParameters: csmVector<BreathParameterData> = new csmVector();
       breathParameters.pushBack(
-        new BreathParameterData(this._idParamAngleX, 0.0, 15.0, 6.5345, 0.5)
+        new BreathParameterData(this._idParamAngleX, 28.0, 2.0, 6.5345, 1)
       );
       breathParameters.pushBack(
         new BreathParameterData(this._idParamAngleY, 0.0, 8.0, 3.5345, 0.5)
@@ -248,6 +248,15 @@ export class LAppModel extends CubismUserModel {
       );
       breathParameters.pushBack(
         new BreathParameterData(this._idParamBodyAngleX, 0.0, 4.0, 15.5345, 0.5)
+      );
+      breathParameters.pushBack(
+        new BreathParameterData(this._idParamBodyAngleY, 0.0, 5.0, 5.5345, 0.5)
+      );
+      breathParameters.pushBack(
+        new BreathParameterData(this._idParamEyeBallX, 0.95, 0.05, 3.5345, 1)
+      );
+      breathParameters.pushBack(
+        new BreathParameterData(this._idParamEyeBallY, 0.5, 0, 15.5345, 0.5)
       );
       breathParameters.pushBack(
         new BreathParameterData(
@@ -305,7 +314,6 @@ export class LAppModel extends CubismUserModel {
       }
 
       this._state = LoadStep.SetupLipSyncIds;
-
       // callback
       setupLipSyncIds();
     };
@@ -845,8 +853,17 @@ export class LAppModel extends CubismUserModel {
     this._idParamEyeBallY = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamEyeBallY
     );
+    this._idParamMouthForm = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamMouthForm
+    );
+    this._idParamMouthOpen = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamMouthOpen
+    );
     this._idParamBodyAngleX = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamBodyAngleX
+    );
+    this._idParamBodyAngleY = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamBodyAngleY
     );
 
     this._state = LoadStep.LoadAssets;
@@ -875,7 +892,10 @@ export class LAppModel extends CubismUserModel {
   _idParamAngleZ: CubismIdHandle; // パラメータID: ParamAngleZ
   _idParamEyeBallX: CubismIdHandle; // パラメータID: ParamEyeBallX
   _idParamEyeBallY: CubismIdHandle; // パラメータID: ParamEyeBAllY
+  _idParamMouthForm: CubismIdHandle; // パラメータID: ParamMouthForm
+  _idParamMouthOpen: CubismIdHandle; // パラメータID: ParamMouthOpen
   _idParamBodyAngleX: CubismIdHandle; // パラメータID: ParamBodyAngleX
+  _idParamBodyAngleY: CubismIdHandle; // パラメータID: ParamBodyAngleY
 
   _state: number; // 現在のステータス管理用
   _expressionCount: number; // 表情データカウント
