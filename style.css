@@ -10,6 +10,9 @@ body {
   );
   background-attachment: fixed;
   background-size: 100vw 100vh;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
 }
 
 /* オーバーレイ / Overlay */
@@ -24,7 +27,7 @@ body {
   align-items: center;
   background: #0006;
   color: #fffc;
-  z-index: 5;
+  z-index: 100;
 }
 #overlay.disabled {
   display: none;
@@ -41,6 +44,35 @@ body {
   border-right: 1px solid #fff6;
 }
 
+#UI-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#Live2D-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+#lyric-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+}
+
+
 /* フッターと音源 / Header and audio source */
 #header,
 #media {
@@ -52,26 +84,17 @@ body {
   background: #000c;
   color: #fff;
 
-  z-index: 1;
 }
 
 /* フッター / Footer */
 #header {
-  /* 上寄せ / Top-aligned */
   top: 20px;
-
-  /* 少し余裕を持たせる / Box with a small padding */
   padding: 10px 16px;
-
-  /* フォントサイズ小さめ、太め / Small but bold typography */
   font-size: 10.5px;
   font-weight: bold;
-
-  /* 子要素を横に並べて配置 / Align child content to the right */
   display: flex;
-
-  /* 子要素は縦に中央揃え / Vertically middle-aligned */
   align-items: center;
+  pointer-events: auto;
 }
 
 /* 再生ボタン / Play button */
@@ -175,7 +198,6 @@ body {
 
 /* 歌詞 / Lyrics */
 #lyrics {
-  z-index: 0;
   padding: 3em 0 5em 0;
   line-height: 2em;
   font-size: 36px;
@@ -184,9 +206,6 @@ body {
   text-shadow: 2px 2px 3px #e4215a;
   user-select: none;
   cursor: pointer;
-
-  /* 歌詞をちょっと回転させる / Rotate text */
-  transform: rotateX(10deg) rotateY(-10deg);
 }
 #text > div {
   /* 文字ごとに改行しない / No line-break per char */
@@ -231,11 +250,12 @@ body {
 
 #seekbar {
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
   height: 10px;
   background: rgba(255 255 255 / 40%);
+  pointer-events: auto;
 }
 
 #seekbar > div {

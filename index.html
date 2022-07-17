@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./style.css"> 
+</head>
+<body>
+  <!-- オーバーレイ / Overlay -->
+  <div id="overlay">
+    <p><span class="far">&#xf254;</span>now loading...</p>
+  </div>
+  
+  <div id="UI-container">
+    <!-- ヘッダ / Header -->
+    <div id="header">
+      <!-- 再生コントロール / Playback control -->
+      <div id="control" class="far">
+        <a href="#" id="play" class="disabled">&#xf144;</a>
+        <a href="#" id="stop" class="disabled">&#xf28d;</a>
+      </div>
+      <!-- アーティストと楽曲の情報 / Artist and song info -->
+      <div id="meta">
+        <div id="artist">artist: <span>-</span></div>
+        <div id="song">song: <span>-</span></div>
+      </div>
+    </div>
+    
+    <!-- 音源 / Audio souce -->
+    <div id="media"></div>
+
+    <!-- シークバー -->
+    <div id="seekbar">
+      <div></div>
+    </div>
+     <!-- VA値 -->
+    <div id="va">
+      <div id="varadius"></div>
+      <div id="vatheta"></div>
+    </div>
+  </div>
+
+  <canvas id="Live2D-container"></canvas>
+    
+  <div id="lyric-container">
+    <!-- 歌詞 / Lyrics text -->
+    <div id="lyrics">
+      <!-- 文字 / Text -->
+      <div id="text"></div>
+      <!-- ビートバー / Beat bar -->
+      <div id="bar"></div>
+    </div>
+  </div>
+
+</body>
+  <!-- Pollyfill script -->
+  <script src = "https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script>
+  <!-- Live2DCubismCore script -->
+  <script src = "./src/CubismSdk/Core/live2dcubismcore.js"></script>
+  <!-- Build script -->
+  <script src = "./dist/Live2D.bundle.js"></script>
+  <script src = "./dist/textalive.bundle.js"></script>
+</html>
