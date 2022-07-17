@@ -250,7 +250,7 @@ export class LAppModel extends CubismUserModel {
         new BreathParameterData(this._idParamBodyAngleX, 0.0, 4.0, 15.5345, 0.5)
       );
       breathParameters.pushBack(
-        new BreathParameterData(this._idParamBodyAngleY, 0.0, 5.0, 5.5345, 0.5)
+        new BreathParameterData(this._idParamBodyAngleY, -10.0, 8.0, 5.5345, 0.5)
       );
       breathParameters.pushBack(
         new BreathParameterData(this._idParamEyeBallX, 0.95, 0.05, 3.5345, 1)
@@ -529,6 +529,10 @@ export class LAppModel extends CubismUserModel {
     if (this._pose != null) {
       this._pose.updateParameters(this._model, deltaTimeSeconds);
     }
+
+    // 口の開きの制御
+    this._model.addParameterValueById(this._idParamMouthForm, 0.5 + 0.5*this._dragX, 1);
+    this._model.addParameterValueById(this._idParamMouthOpenY, this._dragY, 1);
 
     this._model.update();
   }
@@ -856,8 +860,8 @@ export class LAppModel extends CubismUserModel {
     this._idParamMouthForm = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamMouthForm
     );
-    this._idParamMouthOpen = CubismFramework.getIdManager().getId(
-      CubismDefaultParameterId.ParamMouthOpen
+    this._idParamMouthOpenY = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamMouthOpenY
     );
     this._idParamBodyAngleX = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamBodyAngleX
@@ -893,7 +897,7 @@ export class LAppModel extends CubismUserModel {
   _idParamEyeBallX: CubismIdHandle; // パラメータID: ParamEyeBallX
   _idParamEyeBallY: CubismIdHandle; // パラメータID: ParamEyeBAllY
   _idParamMouthForm: CubismIdHandle; // パラメータID: ParamMouthForm
-  _idParamMouthOpen: CubismIdHandle; // パラメータID: ParamMouthOpen
+  _idParamMouthOpenY: CubismIdHandle; // パラメータID: ParamMouthOpen
   _idParamBodyAngleX: CubismIdHandle; // パラメータID: ParamBodyAngleX
   _idParamBodyAngleY: CubismIdHandle; // パラメータID: ParamBodyAngleY
 
