@@ -40,6 +40,14 @@ import { LAppPal } from './lapppal';
 import { TextureInfo } from './lapptexturemanager';
 import { LAppWavFileHandler } from './lappwavfilehandler';
 
+const currentLyric = document.querySelector("#currentLyric");
+
+let oldVowel = [0.5, 0];
+let arousal = 0.3;
+let easeTime = 0, secondEaseTime = 0;
+const easeDuration = 0.1;
+let c, oldc, syl, oldsyl;
+
 enum LoadStep {
   LoadAssets,
   LoadModel,
@@ -531,9 +539,78 @@ export class LAppModel extends CubismUserModel {
     }
 
     // 口の開きの制御
-    this._model.addParameterValueById(this._idParamMouthForm, 0.5 + 0.5*this._dragX, 1);
-    this._model.addParameterValueById(this._idParamMouthOpenY, this._dragY, 1);
+    syl = currentLyric.textContent;
+    if (syl != oldsyl) {
+      secondEaseTime = 0;
+    }
+    if (syl.length == 1) {
+      c = syl.charAt(0);
+    }
+    if (syl.length > 1) {
+      secondEaseTime += deltaTimeSeconds;
+      if (secondEaseTime > 0.3){
+        c = syl.charAt(1);
+      } else {
+        c = syl.charAt(0);
+      }
+      console.log(c, secondEaseTime);
+    }
+    easeTime += deltaTimeSeconds;
+    let completionRate = easeTime/easeDuration;
 
+    if (oldc != c) {
+      easeTime = 0;
+    }
+    let impact = 1-(1-Math.pow(Math.min(completionRate, 1),3));
+    switch (c) {
+      case "a":
+        easeTime += deltaTimeSeconds;
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelA[0], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelA[1], arousal*impact);
+        oldVowel = this._vowelA;
+        oldc = c;
+        break;
+      case "i":
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelI[0], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelI[1], arousal*impact);
+        oldVowel = this._vowelI;
+        oldc = c;
+        break;
+      case "u":
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelU[0], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelU[1], arousal*impact);
+        oldVowel = this._vowelU;
+        oldc = c;
+        break;
+      case "e":
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelE[0], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelE[1], arousal*impact);
+        oldVowel = this._vowelE;
+        oldc = c;
+        break;
+      case "o":
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelO[0], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelO[1], arousal*impact);
+        oldVowel = this._vowelO;
+        oldc = c;
+        break;
+      case "t":
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelT[0], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelT[1], arousal*impact);
+        oldVowel = this._vowelT;
+        oldc = c;
+        break;
+      default:
+        this._model.setParameterValueById(this._idParamMouthForm, 0.5, 1);
+        this._model.setParameterValueById(this._idParamMouthOpenY, 0, 1);
+        easeTime = 0;
+    }
+    if (easeTime > 4) {
+      this._model.setParameterValueById(this._idParamMouthForm, 0.5, Math.min(easeTime - 4, 1));
+      this._model.setParameterValueById(this._idParamMouthOpenY, 0, Math.min(easeTime - 4, 1));
+    }
+
+    oldsyl = syl;
     this._model.update();
   }
 
@@ -876,6 +953,13 @@ export class LAppModel extends CubismUserModel {
     this._motionCount = 0;
     this._allMotionCount = 0;
     this._wavFileHandler = new LAppWavFileHandler();
+
+    this._vowelA = [1.0, 1.0];
+    this._vowelI = [1.0, 0.2];
+    this._vowelU = [-1.0, 0.2];
+    this._vowelE = [1.0, 0.5];
+    this._vowelO = [-1.0, 1.0];
+    this._vowelT = [0.5, 0.2];
   }
 
   _modelSetting: ICubismModelSetting; // モデルセッティング情報
@@ -907,4 +991,11 @@ export class LAppModel extends CubismUserModel {
   _motionCount: number; // モーションデータカウント
   _allMotionCount: number; // モーション総数
   _wavFileHandler: LAppWavFileHandler; //wavファイルハンドラ
+
+  _vowelA: number[];
+  _vowelI: number[];
+  _vowelU: number[];
+  _vowelE: number[];
+  _vowelO: number[];
+  _vowelT: number[];
 }

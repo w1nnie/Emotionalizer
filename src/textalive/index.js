@@ -24,6 +24,7 @@ const bar = document.querySelector("#bar");
 const textContainer = document.querySelector("#text");
 const seekbar = document.querySelector("#seekbar");
 const paintedSeekbar = seekbar.querySelector("div");
+const currentLyric = document.querySelector("#currentLyric");
 let b, c;
 let lyrics = "";
 let lyricsAlley = [];
@@ -105,11 +106,12 @@ player.addListener({
     // 500ms先に発声される文字を取得
     let current = c || player.video.firstChar;
     
-    while (current && current.startTime < position + 500) {
+    while (current && current.startTime < position + 250) {
       // 新しい文字が発声されようとしている
       if (c !== current) {
         newChar(current, player, textContainer);
-        console.log(lyricsAlley[count]);
+        // console.log(lyricsAlley[count]);
+        currentLyric.textContent = lyricsAlley[count];
         count = count + 1;
         c = current;
       }

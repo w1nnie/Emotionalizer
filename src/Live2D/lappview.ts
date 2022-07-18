@@ -129,7 +129,7 @@ export class LAppView {
     let imageName = '';
 
     // // 背景画像初期化
-    imageName = LAppDefine.BackImageName;
+    // imageName = LAppDefine.BackImageName;
 
     // 非同期なのでコールバック関数を作成
     const initBackGroundTexture = (textureInfo: TextureInfo): void => {

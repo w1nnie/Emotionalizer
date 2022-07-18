@@ -275,3 +275,15 @@ body {
   text-align: center;
   color: #fff;
 }
+
+#currentLyric {
+  position:fixed;
+  bottom: 150px;
+  left: 0;
+  background-color: rgba(255,255,255,0.2);
+  height: 50px;
+  width: 100px;
+  font-size: 30px;
+  text-align: cnter;
+  color: #fff;
+}
