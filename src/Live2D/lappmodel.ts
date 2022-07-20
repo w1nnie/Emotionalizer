@@ -13,7 +13,7 @@ import {
   BreathParameterData,
   CubismBreath
 } from '@framework/effect/cubismbreath';
-import { CubismEyeBlink } from '@framework/effect/cubismeyeblink';
+import { CubismEyeBlink, EyeState } from '@framework/effect/cubismeyeblink';
 import { ICubismModelSetting } from '@framework/icubismmodelsetting';
 import { CubismIdHandle } from '@framework/id/cubismid';
 import { CubismFramework } from '@framework/live2dcubismframework';
@@ -43,7 +43,7 @@ import { LAppWavFileHandler } from './lappwavfilehandler';
 const currentLyric = document.querySelector("#currentLyric");
 
 let oldVowel = [0.5, 0];
-let arousal = 0.3;
+let valence = 0.5, arousal = 0.3;
 let easeTime = 0, secondEaseTime = 0;
 const easeDuration = 0.1;
 let c, oldc, syl, oldsyl;
@@ -508,8 +508,8 @@ export class LAppModel extends CubismUserModel {
     ); // -10から10の値を加える
 
     // ドラッグによる目の向きの調整
-    this._model.addParameterValueById(this._idParamEyeBallX, this._dragX); // -1から1の値を加える
-    this._model.addParameterValueById(this._idParamEyeBallY, this._dragY);
+    this._model.addParameterValueById(this._idParamEyeBallX, this._dragX / 10); // -1から1の値を加える
+    this._model.addParameterValueById(this._idParamEyeBallY, this._dragY / 50);
 
     // 呼吸など
     if (this._breath != null) {
@@ -538,7 +538,22 @@ export class LAppModel extends CubismUserModel {
       this._pose.updateParameters(this._model, deltaTimeSeconds);
     }
 
+    // valence arousalによる感情の制御
+    valence = this._dragX;
+    arousal = this._dragY;
+    let eyeArousal = 1 - 1.1 * Math.pow(1 - (0.5 + arousal / 2), 5);
+    this._model.multiplyParameterValueById(this._idParamEyeLOpen, eyeArousal, 1);
+    this._model.multiplyParameterValueById(this._idParamEyeROpen, eyeArousal, 1);
+    this._model.setParameterValueById(this._idParamEyeLArousal, Math.max(-0.5 + 4 * arousal, 0));
+    this._model.setParameterValueById(this._idParamEyeRArousal, Math.max(-0.5 + 4 * arousal, 0));
+    let browVA = Math.min(valence, 0) + Math.max(arousal, 0);
+    this._model.setParameterValueById(this._idParamBrowLForm, browVA);
+    this._model.setParameterValueById(this._idParamBrowRForm, browVA);
+    this._model.setParameterValueById(this._idParamCheek, Math.max(valence, 0));
+
+
     // 口の開きの制御
+    let arousalMouth = Math.min(0.9 + 0.7 * arousal, 1);
     syl = currentLyric.textContent;
     if (syl != oldsyl) {
       secondEaseTime = 0;
@@ -553,7 +568,7 @@ export class LAppModel extends CubismUserModel {
       } else {
         c = syl.charAt(0);
       }
-      console.log(c, secondEaseTime);
+      // console.log(c, secondEaseTime);
     }
     easeTime += deltaTimeSeconds;
     let completionRate = easeTime/easeDuration;
@@ -562,51 +577,52 @@ export class LAppModel extends CubismUserModel {
       easeTime = 0;
     }
     let impact = 1-(1-Math.pow(Math.min(completionRate, 1),3));
+    let mouthValence = 0.5 + valence/2;
     switch (c) {
       case "a":
         easeTime += deltaTimeSeconds;
-        this._model.setParameterValueById(this._idParamMouthForm, this._vowelA[0], arousal*impact);
-        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelA[1], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelA[0]*mouthValence, arousalMouth*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelA[1], arousalMouth*impact);
         oldVowel = this._vowelA;
         oldc = c;
         break;
       case "i":
-        this._model.setParameterValueById(this._idParamMouthForm, this._vowelI[0], arousal*impact);
-        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelI[1], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelI[0]*mouthValence, arousalMouth*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelI[1], arousalMouth*impact);
         oldVowel = this._vowelI;
         oldc = c;
         break;
       case "u":
-        this._model.setParameterValueById(this._idParamMouthForm, this._vowelU[0], arousal*impact);
-        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelU[1], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelU[0]*mouthValence, arousalMouth*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelU[1], arousalMouth*impact);
         oldVowel = this._vowelU;
         oldc = c;
         break;
       case "e":
-        this._model.setParameterValueById(this._idParamMouthForm, this._vowelE[0], arousal*impact);
-        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelE[1], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelE[0]*mouthValence, arousalMouth*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelE[1], arousalMouth*impact);
         oldVowel = this._vowelE;
         oldc = c;
         break;
       case "o":
-        this._model.setParameterValueById(this._idParamMouthForm, this._vowelO[0], arousal*impact);
-        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelO[1], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelO[0]*mouthValence, arousalMouth*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelO[1], arousalMouth*impact);
         oldVowel = this._vowelO;
         oldc = c;
         break;
       case "t":
-        this._model.setParameterValueById(this._idParamMouthForm, this._vowelT[0], arousal*impact);
-        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelT[1], arousal*impact);
+        this._model.setParameterValueById(this._idParamMouthForm, this._vowelT[0]*mouthValence, arousalMouth*impact);
+        this._model.setParameterValueById(this._idParamMouthOpenY, this._vowelT[1], arousalMouth*impact);
         oldVowel = this._vowelT;
         oldc = c;
         break;
       default:
-        this._model.setParameterValueById(this._idParamMouthForm, 0.5, 1);
+        this._model.setParameterValueById(this._idParamMouthForm, valence, 1);
         this._model.setParameterValueById(this._idParamMouthOpenY, 0, 1);
         easeTime = 0;
     }
     if (easeTime > 4) {
-      this._model.setParameterValueById(this._idParamMouthForm, 0.5, Math.min(easeTime - 4, 1));
+      this._model.setParameterValueById(this._idParamMouthForm, valence, Math.min(easeTime - 4, 1));
       this._model.setParameterValueById(this._idParamMouthOpenY, 0, Math.min(easeTime - 4, 1));
     }
 
@@ -928,17 +944,38 @@ export class LAppModel extends CubismUserModel {
     this._idParamAngleZ = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamAngleZ
     );
+    this._idParamEyeLOpen = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamEyeLOpen
+    );
+    this._idParamEyeLArousal = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamEyeLArousal
+    );
+    this._idParamEyeROpen = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamEyeROpen
+    );
+    this._idParamEyeRArousal = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamEyeRArousal
+    );
     this._idParamEyeBallX = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamEyeBallX
     );
     this._idParamEyeBallY = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamEyeBallY
     );
+    this._idParamBrowLForm = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamBrowLForm
+    );
+    this._idParamBrowRForm = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamBrowRForm
+    );
     this._idParamMouthForm = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamMouthForm
     );
     this._idParamMouthOpenY = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamMouthOpenY
+    );
+    this._idParamCheek = CubismFramework.getIdManager().getId(
+      CubismDefaultParameterId.ParamCheek
     );
     this._idParamBodyAngleX = CubismFramework.getIdManager().getId(
       CubismDefaultParameterId.ParamBodyAngleX
@@ -978,10 +1015,17 @@ export class LAppModel extends CubismUserModel {
   _idParamAngleX: CubismIdHandle; // パラメータID: ParamAngleX
   _idParamAngleY: CubismIdHandle; // パラメータID: ParamAngleY
   _idParamAngleZ: CubismIdHandle; // パラメータID: ParamAngleZ
+  _idParamEyeLOpen: CubismIdHandle;
+  _idParamEyeLArousal: CubismIdHandle;
+  _idParamEyeROpen: CubismIdHandle;
+  _idParamEyeRArousal: CubismIdHandle;
   _idParamEyeBallX: CubismIdHandle; // パラメータID: ParamEyeBallX
   _idParamEyeBallY: CubismIdHandle; // パラメータID: ParamEyeBAllY
+  _idParamBrowLForm: CubismIdHandle;
+  _idParamBrowRForm: CubismIdHandle;
   _idParamMouthForm: CubismIdHandle; // パラメータID: ParamMouthForm
   _idParamMouthOpenY: CubismIdHandle; // パラメータID: ParamMouthOpen
+  _idParamCheek: CubismIdHandle;
   _idParamBodyAngleX: CubismIdHandle; // パラメータID: ParamBodyAngleX
   _idParamBodyAngleY: CubismIdHandle; // パラメータID: ParamBodyAngleY
 

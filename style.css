@@ -54,6 +54,26 @@ body {
   pointer-events: none;
 }
 
+#video-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* pointer-events: none; */
+  overflow: hidden;
+}
+
+#moving-box {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  /* animation: test 10s; */
+  animation: test2 10s;
+}
+
 #Live2D-container {
   width: 100%;
   height: 100%;
@@ -61,6 +81,12 @@ body {
   left: 0;
   top: 0;
   z-index: 1;
+  /* overflow: hidden; */
+}
+
+#Live2D {
+  transform-origin: 40% 0%;
+  transform: scale(1.1);
 }
 
 #lyric-container {
@@ -72,6 +98,21 @@ body {
   z-index: 0;
 }
 
+#phrase {
+  position: absolute;
+  top: 30%;
+  left: 5%;
+  width: 50%;
+}
+
+#phrase p {
+  font-size: 2vw;
+  padding: 0.4em;
+  text-align: left;
+  user-select: none;
+  font-family: "Sawarabi Mincho";
+  color: #fff;
+}
 
 /* フッターと音源 / Header and audio source */
 #header,
@@ -92,9 +133,11 @@ body {
   padding: 10px 16px;
   font-size: 10.5px;
   font-weight: bold;
-  display: flex;
+  /* display: flex; */
+  display: none;
   align-items: center;
-  pointer-events: auto;
+  /* pointer-events: auto; */
+  pointer-events: none;
 }
 
 /* 再生ボタン / Play button */
@@ -133,6 +176,26 @@ body {
 #media.disabled > .textalive-media-wrapper {
   width: 0;
   height: 0;
+}
+
+@keyframes test {
+  0% {
+    transform: translateX(3vw);
+  }
+  100% {
+    transform: translateX(0vw);
+  }
+}
+
+@keyframes test2 {
+  0% {
+    transform-origin: 50% 100%;
+    transform: scale(1.8) translateX(1vw);
+  }
+  100% {
+    transform-origin: 50% 100%;
+    transform: scale(1.8) translateX(0vw);
+  }
 }
 
 /**
@@ -256,6 +319,7 @@ body {
   height: 10px;
   background: rgba(255 255 255 / 40%);
   pointer-events: auto;
+  display: none;
 }
 
 #seekbar > div {
@@ -274,6 +338,7 @@ body {
   font-size: 30px;
   text-align: center;
   color: #fff;
+  display: none;
 }
 
 #currentLyric {
@@ -284,6 +349,7 @@ body {
   height: 50px;
   width: 100px;
   font-size: 30px;
-  text-align: cnter;
+  text-align: center;
   color: #fff;
+  display: none;
 }

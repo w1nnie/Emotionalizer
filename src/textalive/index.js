@@ -25,6 +25,8 @@ const textContainer = document.querySelector("#text");
 const seekbar = document.querySelector("#seekbar");
 const paintedSeekbar = seekbar.querySelector("div");
 const currentLyric = document.querySelector("#currentLyric");
+const phraseEl = document.querySelector("#phrase p");
+
 let b, c;
 let lyrics = "";
 let lyricsAlley = [];
@@ -64,6 +66,12 @@ player.addListener({
     overlay.className = "disabled";
     document.querySelector("#control > a#play").className = "";
     document.querySelector("#control > a#stop").className = "";
+    
+    let p = player.video.firstPhrase;
+    while (p && p.next) {
+      p.animate = animatePhrase;
+      p = p.next;
+    }
   },
 
   /* 再生位置の情報が更新されたら呼ばれる */
@@ -74,18 +82,18 @@ player.addListener({
     }%`;
 
     // 現在のビート情報を取得
-    let beat = player.findBeat(position);
-    if (b !== beat) {
-      if (beat) {
-        requestAnimationFrame(() => {
-          bar.className = "active";
-          requestAnimationFrame(() => {
-            bar.className = "active beat";
-          });
-        });
-      }
-      b = beat;
-    }
+    // let beat = player.findBeat(position);
+    // if (b !== beat) {
+    //   if (beat) {
+    //     requestAnimationFrame(() => {
+    //       bar.className = "active";
+    //       requestAnimationFrame(() => {
+    //         bar.className = "active beat";
+    //       });
+    //     });
+    //   }
+    //   b = beat;
+    // }
     // console.log(b.startTime);
 
     // 歌詞情報がなければこれで処理を終わる
@@ -103,13 +111,13 @@ player.addListener({
     document.querySelector("#varadius").textContent = Math.round(Math.sqrt(Math.pow(100*currentVA.v, 2) + Math.pow(100*currentVA.a, 2)));
     document.querySelector("#vatheta").textContent = Math.round(Math.atan2(currentVA.a, currentVA.v) * 180 / Math.PI);
 
-    // 500ms先に発声される文字を取得
+    // 250ms先に発声される文字を取得
     let current = c || player.video.firstChar;
     
     while (current && current.startTime < position + 250) {
       // 新しい文字が発声されようとしている
       if (c !== current) {
-        newChar(current, player, textContainer);
+        // newChar(current, player, textContainer);
         // console.log(lyricsAlley[count]);
         currentLyric.textContent = lyricsAlley[count];
         count = count + 1;
@@ -133,6 +141,12 @@ player.addListener({
     a.appendChild(document.createTextNode("b"));
   }
 });
+
+function animatePhrase(now, unit) {
+  if(unit.contains(now+500)) {
+    phraseEl.textContent = unit.text;
+  }
+}
 
 setUI(player, bar, c, textContainer, seekbar);
 

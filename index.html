@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="./style.css"> 
+  <link rel="stylesheet" href="./style.css">
+  <link href="https://fonts.googleapis.com/css?family=Sawarabi+Mincho" rel="stylesheet">
 </head>
 <body>
   <!-- オーバーレイ / Overlay -->
@@ -39,15 +40,17 @@
     </div>
   </div>
 
-  <canvas id="Live2D-container"></canvas>
-    
-  <div id="lyric-container">
-    <!-- 歌詞 / Lyrics text -->
-    <div id="lyrics">
-      <!-- 文字 / Text -->
-      <div id="text"></div>
-      <!-- ビートバー / Beat bar -->
-      <div id="bar"></div>
+  <div id="video-container">
+    <div id="moving-box">
+      <div id="Live2D-container">
+        <canvas id="Live2D"></canvas>
+      </div>
+      <div id="lyric-container">
+        <div id="phrase"><p></p>
+          <!-- 文字 / Text -->
+          <div id="text"></div>
+        </div>
+      </div>
     </div>
   </div>
 
