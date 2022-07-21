@@ -13,6 +13,34 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
+  cursor: normal;
+  overflow: hidden;
+  user-select: none;
+}
+body:active {
+  cursor: grab;
+}
+
+#isSP {
+  width: 100%;
+  height: 100%;
+  background-color: #eef;
+  justify-content: center; 
+  align-items: center;
+  z-index: 50;
+  display: none;
+}
+@media screen and (max-width: 1024px) {
+  body {
+    display: none;
+  }
+  #isSP {
+    display: flex;
+  }
+}
+
+#isSP p {
+  color: bbc;
 }
 
 /* オーバーレイ / Overlay */
@@ -71,7 +99,7 @@ body {
   left: 0;
   top: 0;
   /* animation: test 10s; */
-  animation: test2 10s;
+  /* animation: test2 10s; */
 }
 
 #Live2D-container {
@@ -85,7 +113,7 @@ body {
 }
 
 #Live2D {
-  transform-origin: 40% 0%;
+  transform-origin: 20% 0%;
   transform: scale(1.1);
 }
 
@@ -114,8 +142,22 @@ body {
   color: #fff;
 }
 
+#bg-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+
+#bg-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* フッターと音源 / Header and audio source */
-#header,
 #media {
   /* ページ左に固定 / Stick to the page left */
   position: fixed;
@@ -136,33 +178,76 @@ body {
   /* display: flex; */
   display: none;
   align-items: center;
-  /* pointer-events: auto; */
   pointer-events: none;
-}
+} 
 
 /* 再生ボタン / Play button */
 #control {
-  font-size: 21px;
-  padding-right: 10px;
-  border-right: 1px solid #fff9;
+  position: absolute;
+  width: 7vw;
+  height: 7vw;
+  font-size: 2vw;
+  left: 5vw;
+  bottom: 11vw;
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
 }
+
+#control #play {
+  height: 100%;
+}
+
+#control #stop {
+  position: relative;
+  height: 100%;
+  left: 2vw;
+  top: 6vw;
+}
+
 #control.disabled {
   display: none;
 }
-#control a {
-  color: rgb(99 208 226);
-  text-decoration: none;
+#control img {
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 1vw #5dcbfc)
 }
+#control img:hover{
+  animation: scale 0.2s ease-out 0s 1 normal forwards;
+}
+#control img:active {
+  filter: brightness(0.8);
+}
+#control #play img:nth-of-type(2) {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 #control a.disabled {
   opacity: 0.3;
 }
-#control a:hover {
-  color: rgb(255 148 56);
+
+#exp {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#exp img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
 }
 
 /* アーティストと楽曲の情報 / Artist and song info */
 #meta {
   padding-left: 10px;
+  display: none;
 }
 #meta span {
   font-weight: normal;
@@ -176,6 +261,15 @@ body {
 #media.disabled > .textalive-media-wrapper {
   width: 0;
   height: 0;
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }
 
 @keyframes test {

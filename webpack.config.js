@@ -16,7 +16,8 @@ module.exports = {
         extensions: ['.ts','.js'],
         alias: {
             '@framework': path.resolve(__dirname, './src/CubismSdk/Framework/src'),
-            '@core': path.resolve(__dirname, './src/CubismSdk/Core')
+            '@core': path.resolve(__dirname, './src/CubismSdk/Core'),
+            '@images': path.resolve(__dirname, './images')
         }
     },
     cache: true,

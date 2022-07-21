@@ -39,8 +39,11 @@ import { canvas, frameBuffer, gl, LAppDelegate } from './lappdelegate';
 import { LAppPal } from './lapppal';
 import { TextureInfo } from './lapptexturemanager';
 import { LAppWavFileHandler } from './lappwavfilehandler';
+import { TouchManager } from './touchmanager';
 
 const currentLyric = document.querySelector("#currentLyric");
+const autoValence = document.querySelector("#valence");
+const autoArousal = document.querySelector("#arousal");
 
 let oldVowel = [0.5, 0];
 let valence = 0.5, arousal = 0.3;
@@ -459,6 +462,12 @@ export class LAppModel extends CubismUserModel {
     this._dragManager.update(deltaTimeSeconds);
     this._dragX = this._dragManager.getX();
     this._dragY = this._dragManager.getY();
+    if (Math.abs(this._dragX) < 0.01) {
+      this._dragX = Number(autoValence.textContent);
+    }
+    if (Math.abs(this._dragY) < 0.01) {
+      this._dragY = Number(autoArousal.textContent);
+    }
 
     // モーションによるパラメータ更新の有無
     let motionUpdated = false;
@@ -541,7 +550,12 @@ export class LAppModel extends CubismUserModel {
     // valence arousalによる感情の制御
     valence = this._dragX;
     arousal = this._dragY;
-    let eyeArousal = 1 - 1.1 * Math.pow(1 - (0.5 + arousal / 2), 5);
+    let eyeArousal;
+    if (valence > 0) {
+      eyeArousal = 1 - 1.3 * Math.pow(1 - (0.5 + arousal / 2), 5) - valence / 20;
+    } else {
+      eyeArousal = 1 - 1.3 * Math.pow(1 - (0.5 + arousal / 2), 5);
+    }
     this._model.multiplyParameterValueById(this._idParamEyeLOpen, eyeArousal, 1);
     this._model.multiplyParameterValueById(this._idParamEyeROpen, eyeArousal, 1);
     this._model.setParameterValueById(this._idParamEyeLArousal, Math.max(-0.5 + 4 * arousal, 0));
@@ -553,7 +567,13 @@ export class LAppModel extends CubismUserModel {
 
 
     // 口の開きの制御
-    let arousalMouth = Math.min(0.9 + 0.7 * arousal, 1);
+    let arousalMouth;
+    if (valence > 0 && arousal < 0) {
+      arousalMouth = 0.4 + valence / 5;
+
+    } else {
+      arousalMouth = Math.min(0.9 + 0.5 * arousal, 1);
+    }
     syl = currentLyric.textContent;
     if (syl != oldsyl) {
       secondEaseTime = 0;

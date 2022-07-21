@@ -1,9 +1,9 @@
 import resetChars from "./resetChars.js";
 
-export default function setUI(player, bar, c, textContainer, seekbar){
+export default function setUI(player,  c, textContainer, seekbar){
 
     /* 再生・一時停止ボタン */
-    document.querySelector("#control > a#play").addEventListener("click", (e) => {
+    document.querySelector("#control > #play").addEventListener("click", (e) => {
     e.preventDefault();
     if (player) {
         if (player.isPlaying) {
@@ -16,13 +16,12 @@ export default function setUI(player, bar, c, textContainer, seekbar){
     });
 
     /* 停止ボタン */
-    document.querySelector("#control > a#stop").addEventListener("click", (e) => {
+    document.querySelector("#control > #stop").addEventListener("click", (e) => {
     e.preventDefault();
     if (player) {
         player.requestStop();
 
         // 再生を停止したら画面表示をリセットする
-        bar.className = "";
         c = resetChars(c, textContainer);
     }
     return false;

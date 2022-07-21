@@ -6,24 +6,33 @@
   <link href="https://fonts.googleapis.com/css?family=Sawarabi+Mincho" rel="stylesheet">
 </head>
 <body>
+
+  <div id="isSP">
+    <p><span class="caution">このアプリはPCでのみ動作します</span></p>
+  </div>
   <!-- オーバーレイ / Overlay -->
   <div id="overlay">
-    <p><span class="far">&#xf254;</span>now loading...</p>
+    <p><span class="far"></span>now loading...</p>
   </div>
   
   <div id="UI-container">
-    <!-- ヘッダ / Header -->
-    <div id="header">
-      <!-- 再生コントロール / Playback control -->
-      <div id="control" class="far">
-        <a href="#" id="play" class="disabled">&#xf144;</a>
-        <a href="#" id="stop" class="disabled">&#xf28d;</a>
+    <!-- 再生コントロール / Playback control -->
+    <div id="control" class="far">
+      <div id="play" class="disabled" onclick="playButton()">
+        <img src="images/pause.png">
+        <img src="images/play.png" id="playImg">
       </div>
-      <!-- アーティストと楽曲の情報 / Artist and song info -->
-      <div id="meta">
-        <div id="artist">artist: <span>-</span></div>
-        <div id="song">song: <span>-</span></div>
+      <div href="#" id="stop" class="disabled" onclick="stopButton()">
+        <img src="images/stop.png">
       </div>
+    </div>
+    <div id="exp">
+      <img src="images/MagicalMirai2022_exp.png">
+    </div>
+    <!-- アーティストと楽曲の情報 / Artist and song info -->
+    <div id="meta">
+      <div id="artist">artist: <span>-</span></div>
+      <div id="song">song: <span>-</span></div>
     </div>
     
     <!-- 音源 / Audio souce -->
@@ -35,8 +44,8 @@
     </div>
      <!-- VA値 -->
     <div id="va">
-      <div id="varadius"></div>
-      <div id="vatheta"></div>
+      <div id="valence"></div>
+      <div id="arousal"></div>
     </div>
   </div>
 
@@ -52,6 +61,10 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="bg-container">
+    <img src="images/MagicalMirai2022_bg.png">
   </div>
 
   <div id="currentLyric"></div>
